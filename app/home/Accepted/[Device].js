@@ -1,76 +1,95 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
-import { useRoute , useLocalSearchParams} from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler'
-import { TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { Link } from 'expo-router';
+import { View, Image,Text, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList} from 'react-native'
+import {Link} from 'expo-router'
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { ScrollView } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 
 
 const Device = () => {
     const local = useLocalSearchParams()
-    const [deviceID, setDeviceID] = useState(local.deviceID)
-    const [deviceImg, setDeviceImg] = useState(local.deviceImg)
-    const [donnerName, setDonnerName] = useState(local.donnerName)
-    const [deviceType, setDeviceType] = useState(local.deviceType)
+    // const [deviceID, setDeviceID] = useState(local.deviceID)
+    // const [deviceImg, setDeviceImg] = useState(local.deviceImg)
+    // const [donnerName, setDonnerName] = useState(local.donnerName)
+    // const [deviceType, setDeviceType] = useState(local.deviceType)
 
     return (
-        <SafeAreaProvider style={styles.container}>
-            <ScrollView>
+        <SafeAreaView style={styles.container}>
+                        <ScrollView>
                 <View style={styles.imgContainer}>
-                    <Image source={local.deviceImg}/>
-                </View>
-                <View style={styles.btnView}>
-                    <TouchableOpacity  style={styles.btn2}>
-                        <Link href={{
-                            pathname:'/home/Accepted/GiveDevice/[GiveDevice]',
-                            params:{
-                                rejectedDeviceImg: deviceImg,
-                                rejectedDeviceType: deviceType,
-                                rejectedDonnerName: donnerName
-                            }
-                            }}
-                            onPress={()=>{console.log('give device')}}
-                        >
-                            <Text style={{color:'#ffffff', fontSize:18}}>منح الجهاز</Text>
-                        </Link>
-                    </TouchableOpacity>
+                    <Image source={local.acceptedDeviceImg}/>
                 </View>
                 <View>
                     {/* Device Info */}
                     <Text style={styles.headerText}>
                     معلومات عن الجهاز
                     </Text>
-                    <Text style={styles.Text}>نوع الجهاز: {local.deviceType}</Text>
-                    <Text style={styles.Text}>موديل الجهاز: {local.deviceModel}</Text>
-                    <Text style={styles.Text}>حجم الجهاز: {local.deviceSize}</Text>
-                    <Text style={styles.Text}>غرض الاستخدام: {local.causeOfUse}</Text>
+                    <Text style={styles.Text}>نوع الجهاز: {local.acceptedDeviceType}</Text>
+                    <Text style={styles.Text}>موديل الجهاز: {local.acceptedDeviceModel}</Text>
+                    <Text style={styles.Text}>حجم الجهاز: {local.acceptedDeviceSize}</Text>
+                    <Text style={styles.Text}>غرض الاستخدام: {local.acceptedDeviceCauseOfUse}</Text>
                     
                     {/* PrevUser Info */}
                     <Text style={styles.headerText}>معلومات عن المستخدم السابق</Text>
-                    <Text style={styles.Text}>عمر المستخدم السابق: {local.prevUserAge}</Text>
-                    <Text style={styles.Text}>وزن المستخدم السابق: {local.prevUserWeight}</Text>
-                    <Text style={styles.Text}>مدة الاستخدام: {local.durationOfUse}</Text>
+                    <Text style={styles.Text}>عمر المستخدم السابق: {local.acceptedDevicePrevUserAge}</Text>
+                    <Text style={styles.Text}>وزن المستخدم السابق: {local.acceptedDevicePrevUserWeight}</Text>
+                    <Text style={styles.Text}>
+                        {`مدة الاستخدام: ${local.acceptedDeviceCondition ? "جهاز جديد" : local.acceptedDeviceDurationOfUse }`}
+                    </Text>
+
+
 
                     {/* Donner Info */}
                     <Text style={styles.headerText}>معلومات عن فاعل الخير</Text>
-                    <Text style={styles.Text}>الاسم: {local.donnerName}</Text>
-                    <Text style={styles.Text}>رقم الهاتف: {local.donnerPhone}</Text>
-                    <Text style={styles.Text}>مكان السكن: {local.donnerLocation}</Text>
+                    <Text style={styles.Text}>رقم الهاتف: {local.acceptedDeviceDonnerPhoneNumber}</Text>
+                    <Text style={styles.Text}>مكان السكن: {local.acceptedDeviceDonnerLocation}</Text>
+
+                    {/* Need pick Up */}
+                    <Text style={styles.Text}>
+                        {`يحتاج الى سيارة لتوصيل الجهاز: ${local.acceptedDeviceNeedPickUp ? "نعم" : "لا"}`}
+                    </Text>
                 </View>
+                <View
+                    style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-evenly",
+                            marginVertical:24
+                        }}>
+                        <TouchableOpacity
+                            style={styles.btn}
+                        >
+                            <Link 
+                                href={{
+                                    pathname:'/home/Accepted/GiveDevice/[GiveDevice]',
+                                    params:{
+                                        giveDeviceType:local.acceptedDeviceType,
+                                        giveDeviceSize:local.acceptedDeviceSize,
+                                        giveDeviceModel:local.acceptedDeviceModel,
+                                        giveDeviceImg:local.acceptedDeviceImg,
+                                        giveDeviceCondition:local.acceptedDeviceCondition
+                                    }
+                                }} 
+                                style={styles.btnText}
+                            >
+                                <Text >منح الجهاز لمريض</Text>
+                            </Link>
+                        </TouchableOpacity>
+                    </View>
             </ScrollView>
-        </SafeAreaProvider>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom:24
+    container:{
+        paddingHorizontal:24,
+        display:"flex",
+        flexDirection:"column",
+        flex:1,
+        textAlign:"right",
+        backgroundColor:"#FFF",
     },
     imgContainer:{
         borderBottomWidth: 3,
@@ -94,21 +113,35 @@ const styles = StyleSheet.create({
         fontSize:16,
         marginTop:8,
     },
-    btnView:{
-        marginVertical:18
+    btn: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: 8,
+        backgroundColor: "#005F86",
+        marginVertical: 8,
+        flex: 1,
+        marginLeft: 2,
     },
-    btn2:{
-        fontSize:18,
-        borderWidth:1.5,
-        borderRadius:8,
-        borderColor:"#005F86",
-        paddingHorizontal:16,
-        paddingVertical:10,
-        backgroundColor:"#005F86",
-        display:"flex",
-        flexDirection:"column",
-        alignItems:"center"
-    }
+    btn2: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: 8,
+        borderColor: "#005F86",
+        borderWidth: 2,
+        marginVertical: 8,
+        flex: 1,
+        marginRight: 2,
+    },
+    btnText: {
+        fontSize: 18,
+        color: "#fff",
+        textAlign: "center",
+    },
+    btn2Text: {
+        fontSize: 18,
+        color: "#005F86",
+        textAlign: "center",
+    },
 });
 
 

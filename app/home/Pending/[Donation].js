@@ -1,79 +1,122 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
-import { useRoute , useLocalSearchParams} from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler'
-import { TouchableOpacity } from 'react-native';
-import { useState } from 'react';
-import { Link } from 'expo-router';
+import { View, Image,Text, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList} from 'react-native'
+import {Link} from 'expo-router'
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { ScrollView } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 
 
 const Donation = () => {
     const local = useLocalSearchParams()
 
-    const [deviceImg, setDeviceImg] = useState(local.deviceImg)
-    const [donnerName, setDonnerName] = useState(local.donnerName)
-    const [deviceType, setDeviceType] = useState(local.deviceType)
+    const [deviceImg, setDeviceImg] = useState(local.pendingDeviceImg)
+    const [donnerPhoneNumber, setDonnerPhoneNumber] = useState(local.pendingDeviceDonnerPhoneNumber)
+    const [deviceType, setDeviceType] = useState(local.pendingDeviceType)
 
     return (
-        <SafeAreaProvider style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.imgContainer}>
-                    <Image source={local.deviceImg}/>
+                    <Image source={deviceImg}/>
                 </View>
                 <View>
                     {/* Device Info */}
                     <Text style={styles.headerText}>
                     معلومات عن الجهاز
                     </Text>
-                    <Text style={styles.Text}>نوع الجهاز: {local.deviceType}</Text>
-                    <Text style={styles.Text}>موديل الجهاز: {local.deviceModel}</Text>
-                    <Text style={styles.Text}>حجم الجهاز: {local.deviceSize}</Text>
-                    <Text style={styles.Text}>غرض الاستخدام: {local.causeOfUse}</Text>
+                    <Text style={styles.Text}>نوع الجهاز: {local.pendingDeviceType}</Text>
+                    <Text style={styles.Text}>موديل الجهاز: {local.pendingDeviceModel}</Text>
+                    <Text style={styles.Text}>حجم الجهاز: {local.pendingDeviceSize}</Text>
+                    <Text style={styles.Text}>غرض الاستخدام: {local.pendingDeviceCauseOfUse}</Text>
                     
                     {/* PrevUser Info */}
                     <Text style={styles.headerText}>معلومات عن المستخدم السابق</Text>
-                    <Text style={styles.Text}>عمر المستخدم السابق: {local.prevUserAge}</Text>
-                    <Text style={styles.Text}>وزن المستخدم السابق: {local.prevUserWeight}</Text>
-                    <Text style={styles.Text}>مدة الاستخدام: {local.durationOfUse}</Text>
+                    <Text style={styles.Text}>عمر المستخدم السابق: {local.pendingDevicePrevUserAge}</Text>
+                    <Text style={styles.Text}>وزن المستخدم السابق: {local.pendingDevicePrevUserWeight}</Text>
+                    <Text style={styles.Text}>
+                        {`مدة الاستخدام: ${local.pendingDeviceCondition ? "جهاز جديد" : local.pendingDeviceDurationOfUse }`}
+                    </Text>
 
+
+  
                     {/* Donner Info */}
                     <Text style={styles.headerText}>معلومات عن فاعل الخير</Text>
-                    <Text style={styles.Text}>الاسم: {local.donnerName}</Text>
-                    <Text style={styles.Text}>رقم الهاتف: {local.donnerPhone}</Text>
-                    <Text style={styles.Text}>مكان السكن: {local.donnerLocation}</Text>
+                    <Text style={styles.Text}>رقم الهاتف: {local.pendingDeviceDonnerPhoneNumber}</Text>
+                    <Text style={styles.Text}>مكان السكن: {local.pendingDeviceDonnerLocation}</Text>
+
+                    {/* Need pick Up */}
+                    <Text style={styles.Text}>
+                        {`يحتاج الى سيارة لتوصيل الجهاز: ${local.pendingDeviceNeedPickUp ? "نعم" : "لا"}`}
+                    </Text>
                 </View>
-                <View style={styles.btnView}>
-                    <TouchableOpacity  style={styles.btn1}>
-                        <Link href={{
-                            pathname:'/home/Pending/RejectDevice/[RejectDevice]',
-                            params:{
-                                rejectedDeviceImg: deviceImg,
-                                rejectedDeviceType: deviceType,
-                                rejectedDonnerName: donnerName
-                            }
-                            }}
-                            onPress={()=>{console.log('reject device')}}
-                        >
-                            <Text style={{color:'#005F86', fontSize:18,}}>رفض الجهاز</Text>
-                        </Link>
-                    </TouchableOpacity>
-                    <TouchableOpacity  style={styles.btn2}>
-                        <Text style={{color:'#ffffff', fontSize:18}}>قبول الجهاز</Text>
-                    </TouchableOpacity>
-                </View>
+                <View
+                    style={{
+                            flexDirection: "row",
+                            alignItems: "center",
+                            justifyContent: "space-evenly",
+                            marginVertical:24
+                        }}>
+                        <TouchableOpacity
+                            style={styles.btn2}>
+                                <Link
+                                    href={{
+                                        pathname:'/home/Pending/RejectDevice/[RejecteDevice]',
+                                        params:{
+                                            rejectDeviceImg: deviceImg,
+                                            rejectDeviceType:local.pendingDeviceType,
+                                            rejectDeviceSize:local.pendingDeviceSize,
+                                            rejectDeviceModel:local.pendingDeviceModel,
+                                            rejectDeviceDurationOfUse:local.pendingDeviceDurationOfUse,
+                                            rejectDevicePrevUserAge:local.pendingDevicePrevUserAge,
+                                            rejectDevicePrevUserWeight:local.pendingDevicePrevUserWeight,
+                                            rejectDeviceCauseOfUse:local.pendingDeviceCauseOfUse,
+                                            rejectDeviceDonnerPhoneNumber:local.pendingDeviceDonnerPhoneNumber,
+                                            rejectDeviceDonnerLocation:local.pendingDeviceDonnerLocation
+                                        }
+                                    }}
+                                    style={styles.btn2Text}
+                                >
+                                    <Text >رفض الجهاز</Text>
+                                </Link>
+                        </TouchableOpacity>
+
+                        <TouchableOpacity style={styles.btn}>
+                            <Link 
+                                style={styles.btnText}
+                                href={{
+                                    pathname:'/home/Pending/AcceptDevice/[AcceptDevice]',
+                                    params:{
+                                        acceptDeviceImg: deviceImg,
+                                        acceptDeviceType:local.pendingDeviceType,
+                                        acceptDeviceSize:local.pendingDeviceSize,
+                                        acceptDeviceModel:local.pendingDeviceModel,
+                                        acceptDeviceDurationOfUse:local.pendingDeviceDurationOfUse,
+                                        acceptDevicePrevUserAge:local.pendingDevicePrevUserAge,
+                                        acceptDevicePrevUserWeight:local.pendingDevicePrevUserWeight,
+                                        acceptDeviceCauseOfUse:local.pendingDeviceCauseOfUse,
+                                        acceptDeviceDonnerPhoneNumber:local.pendingDeviceDonnerPhoneNumber,
+                                        acceptDeviceDonnerLocation:local.pendingDeviceDonnerLocation 
+                                    }
+                                }}
+                            >
+                                <Text>قبول الجهاز</Text>
+                            </Link>
+                        </TouchableOpacity>
+                    </View>
             </ScrollView>
-        </SafeAreaProvider>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom:24
+    container:{
+        paddingHorizontal:24,
+        display:"flex",
+        flexDirection:"column",
+        flex:1,
+        textAlign:"right",
+        backgroundColor:"#FFF",
     },
     imgContainer:{
         borderBottomWidth: 3,
@@ -97,30 +140,35 @@ const styles = StyleSheet.create({
         fontSize:16,
         marginTop:8,
     },
-    btnView:{
-        flexDirection:"row",
-        alignItems:"center",
-        justifyContent:"space-between",
-        marginVertical:32
+    btn: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: 8,
+        backgroundColor: "#005F86",
+        marginVertical: 8,
+        flex: 1,
+        marginLeft: 2,
     },
-    btn1:{
-        borderWidth:1.5,
-        marginHorizontal:32,
-        borderRadius:8,
-        borderColor:"#005F86",
-        paddingHorizontal:16,
-        paddingVertical:10,
+    btn2: {
+        paddingHorizontal: 16,
+        paddingVertical: 10,
+        borderRadius: 8,
+        borderColor: "#005F86",
+        borderWidth: 2,
+        marginVertical: 8,
+        flex: 1,
+        marginRight: 2,
     },
-    btn2:{
-        fontSize:18,
-        borderWidth:1.5,
-        marginHorizontal:32,
-        borderRadius:8,
-        borderColor:"#005F86",
-        paddingHorizontal:16,
-        paddingVertical:10,
-        backgroundColor:"#005F86"
-    }
+    btnText: {
+        fontSize: 18,
+        color: "#fff",
+        textAlign: "center",
+    },
+    btn2Text: {
+        fontSize: 18,
+        color: "#005F86",
+        textAlign: "center",
+    },
 });
 
 

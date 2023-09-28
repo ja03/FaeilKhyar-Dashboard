@@ -1,75 +1,87 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, FlatList } from 'react-native'
-import {Link} from 'expo-router'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler'
+import {
+  View,
+  Image,
+  Text,
+  StyleSheet,
+  TouchableOpacity,
+  TextInput,
+  Alert,
+  FlatList,
+} from "react-native";
+import { Link } from "expo-router";
+import React from "react";
+import { SafeAreaView } from "react-native-safe-area-context";
+import { useState } from "react";
+import { ScrollView } from "react-native";
 
 //Components
-import PendingCard from '../../../Componentes/Home/Pending/PendingCard';
+import DeviceCard from "../../../Componentes/DeviceCard";
 
-const rejectedDevices = [
+const rejectedDonation = [
   {
-  id: 1,
-  imgSrc: require('../../../assets/imgs/device-img.png'),
-  seen: true,
-  type: 'كرسي متحرك',
-  donnerName: 'خالد محمود',
-  deviceModel:'Model 1101',
-  deviceSize:'3xl',
-  causeOfUse:'broke my arm',
-  prevUserAge:24,
-  prevUserWeight:79,
-  durationOfUse:'Two weeks',
-  donnerPhone:'0791234567',
-  donnerLocation:'عمان الدوار السابع',
-  causeOfReject:"The device was broken"
+      id: 1,
+      deviceImg: require("../../../assets/imgs/device-img.png"),
+      deviceType: "كرسي متحرك",
+      deviceModel: "Model 1101",
+      deviceSize: "3xl",
+      deviceCondition: false,
+      durationOfUse: "Two weeks",
+      prevUserAge: 24,
+      prevUserWeight: 79,
+      causeOfUse: "broke my arm",
+      donnerPhoneNumber: +962791049417,
+      donnerLocation: "عمان الدوار السابع",
+      needPickUp: false,
+      causeOfReject:"The device was broken fam"
+      
+  }, 
+  {
+      id: 2,
+      deviceImg: require("../../../assets/imgs/device-img.png"),
+      deviceType: "كرسي متحرك",
+      deviceModel: "Model 1101",
+      deviceSize: "3xl",
+      deviceCondition: false,
+      durationOfUse: "Two weeks",
+      prevUserAge: 24,
+      prevUserWeight: 79,
+      causeOfUse: "broke my arm",
+      donnerPhoneNumber: +962791049417,
+      donnerLocation: "عمان الدوار السابع",
+      needPickUp: false,
+      causeOfReject:"The device was broken fam"
   },
   {
-  id: 2,
-  imgSrc: require('../../../assets/imgs/device-img.png'),
-  seen: true,
-  type: 'كرسي متحرك',
-  donnerName: 'خالد محمود',
-  deviceModel:'Model 1101',
-  deviceSize:'3xl',
-  causeOfUse:'broke my arm',
-  prevUserAge:24,
-  prevUserWeight:79,
-  durationOfUse:'Two weeks',
-  donnerPhone:'0791234567',
-  donnerLocation:'عمان الدوار السابع',
-  causeOfReject:"The device was broken"
+      id: 3,
+      deviceImg: require("../../../assets/imgs/device-img.png"),
+      deviceType: "كرسي متحرك",
+      deviceModel: "Model 1101",
+      deviceSize: "3xl",
+      deviceCondition: true,
+      durationOfUse: "Two weeks",
+      prevUserAge: 24,
+      prevUserWeight: 79,
+      causeOfUse: "broke my arm",
+      donnerPhoneNumber: +962791049417,
+      donnerLocation: "عمان الدوار السابع",
+      needPickUp: true,
+      causeOfReject:"The device was broken fam"
   },
   {
-  id: 3,
-  imgSrc: require('../../../assets/imgs/device-img.png'),
-  seen: true,
-  type: 'كرسي متحرك',
-  donnerName: 'خالد محمود',
-  deviceModel:'Model 1101',
-  deviceSize:'3xl',
-  causeOfUse:'broke my arm',
-  prevUserAge:24,
-  prevUserWeight:79,
-  durationOfUse:'Two weeks',
-  donnerPhone:'0791234567',
-  donnerLocation:'عمان الدوار السابع',
-  causeOfReject:"The device was broken"
-  },
-  {
-  id: 4,
-  imgSrc: require('../../../assets/imgs/device-img.png'),
-  seen: true,
-  type: 'كرسي متحرك',
-  donnerName: 'خالد محمود',
-  deviceModel:'Model 1101',
-  deviceSize:'3xl',
-  causeOfUse:'broke my arm',
-  prevUserAge:24,
-  prevUserWeight:79,
-  durationOfUse:'Two weeks',
-  donnerPhone:'0791234567',
-  donnerLocation:'عمان الدوار السابع',
-  causeOfReject:"The device was broken"
+      id: 4,
+      deviceImg: require("../../../assets/imgs/device-img.png"),
+      deviceType: "كرسي متحرك",
+      deviceModel: "Model 1101",
+      deviceSize: "3xl",
+      deviceCondition: true,
+      durationOfUse: "Two weeks",
+      prevUserAge: 24,
+      prevUserWeight: 79,
+      causeOfUse: "broke my arm",
+      donnerPhoneNumber: +962791049417,
+      donnerLocation: "عمان الدوار السابع",
+      needPickUp: true,
+      causeOfReject:"The device was broken fam"
   },
 ];
 
@@ -77,55 +89,63 @@ const RejectedDevices =() => {
 
   const renderRejectedDevices = ({item})=>{
     return(
-      <Link href={{
-        pathname:'/home/Rejected/[Rejected]',
-        params:{
-          deviceImg: item.imgSrc,
-          deviceType: item.type,
-          deviceModel: item.deviceModel,
-          deviceSize:item.deviceSize,
-          causeOfUse:item.causeOfUse,
-          prevUserAge: item.prevUserAge,
-          prevUserWeight: item.prevUserWeight,
-          durationOfUse: item.durationOfUse,
-          donnerPhone: item.donnerPhone,
-          donnerName: item.donnerName,
-          donnerLocation: item.donnerLocation,
-          causeOfReject: item.causeOfReject
-        }
-        }} style={{ marginVertical:10}}>
-          <PendingCard seen={item.seen} categoryType={item.type} categroySubText={item.donnerName} categoryImg={item.imgSrc}/>
-      </Link>
+<View
+                style={{
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                }}>
+                <Link
+                    href={{
+                        pathname: "/home/Rejected/[Rejected]",
+                        params: {
+                            rejectedDeviceType: item.deviceType,
+                            rejectedDeviceSize: item.deviceSize,
+                            rejectedDeviceModel: item.deviceModel,
+                            rejectedDeviceImg: item.deviceImg,
+                            rejectedDeviceCondition: item.deviceCondition,
+                            rejectedDeviceDurationOfUse: item.durationOfUse,
+                            rejectedDevicePrevUserAge: item.prevUserAge,
+                            rejectedDevicePrevUserWeight: item.prevUserWeight,
+                            rejectedDeviceCauseOfUse: item.causeOfUse,
+                            rejectedDeviceDonnerPhoneNumber:
+                                item.donnerPhoneNumber,
+                            rejectedDeviceDonnerLocation: item.donnerLocation,
+                            rejectedDeviceNeedPickUp: item.needPickUp,
+                            rejectedDeviceCauseOfReject: item.causeOfReject
+                        },
+                    }}
+                    style={{ marginVertical: 12, height: 128 }}>
+                    <DeviceCard donation={item} showHospitalName={false} />
+                </Link>
+            </View>
     )
   }
 
   return (
-<SafeAreaProvider  style={styles.container}>
-    <ScrollView>
+<SafeAreaView  style={styles.container}>
       <Text style={styles.headerText}>الاجهزة التي تم رفضها</Text>
-      <Text style={styles.subLinkText}>العدد: {rejectedDevices.length}</Text>
-      <FlatList
-        data={rejectedDevices}
-        renderItem={renderRejectedDevices}
-        keyExtractor={(item) => (item && item.id !== undefined ? item.id.toString() : 'defaultKey')}
-
-      />
-      
-        
-  
-
-    </ScrollView>
-    </SafeAreaProvider>
+      <Text style={styles.subLinkText}>العدد: {rejectedDonation.length}</Text>
+      <View style={{flex:1}}>
+        <FlatList
+          data={rejectedDonation}
+          renderItem={renderRejectedDevices}
+          keyExtractor={(item) => (item && item.id !== undefined ? item.id.toString() : 'defaultKey')}
+        />
+      </View>
+    </SafeAreaView>
   )
 }
 
 const styles = StyleSheet.create({
   container: {
-      flex: 1,
-      backgroundColor: '#FFF',
-      paddingTop:48,
-      paddingHorizontal:24
-  },
+    paddingHorizontal: 24,
+    display: "flex",
+    flexDirection: "column",
+    flex: 1,
+    textAlign: "right",
+    backgroundColor: "#FFF",
+},
   headerText:{
       textAlign:'right',
       fontSize:26,

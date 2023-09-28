@@ -1,56 +1,57 @@
-import React from 'react';
-import { View, Text, StyleSheet, Button, Image } from 'react-native';
-import { useRoute , useLocalSearchParams} from 'expo-router';
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler'
-import { TouchableOpacity } from 'react-native';
+import { View, Image,Text, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList} from 'react-native'
+import {Link} from 'expo-router'
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { ScrollView } from 'react-native'
+import { useLocalSearchParams } from 'expo-router'
 
 
 const Rejected = () => {
     const local = useLocalSearchParams()
     return (
-        <SafeAreaProvider style={styles.container}>
+        <SafeAreaView style={styles.container}>
             <ScrollView>
                 <View style={styles.imgContainer}>
-                    <Image source={local.deviceImg}/>
+                    <Image source={local.rejectedDeviceImg}/>
                 </View>
                 <View>
                     {/* Cause of Rejection */}
                     <Text style={styles.headerText}>سبب الرفض</Text>
-                    <Text style={styles.Text}>{local.causeOfReject}</Text>
+                    <Text style={styles.Text}>{local.rejectedDeviceCauseOfReject}</Text>
 
                     {/* Device Info */}
                     <Text style={styles.headerText}>معلومات عن الجهاز</Text>
-                    <Text style={styles.Text}>نوع الجهاز: {local.deviceType}</Text>
-                    <Text style={styles.Text}>موديل الجهاز: {local.deviceModel}</Text>
-                    <Text style={styles.Text}>حجم الجهاز: {local.deviceSize}</Text>
-                    <Text style={styles.Text}>غرض الاستخدام: {local.causeOfUse}</Text>
+                    <Text style={styles.Text}>نوع الجهاز: {local.rejectedDeviceType}</Text>
+                    <Text style={styles.Text}>موديل الجهاز: {local.rejectedDeviceModel}</Text>
+                    <Text style={styles.Text}>حجم الجهاز: {local.rejectedDeviceSize}</Text>
+                    <Text style={styles.Text}>غرض الاستخدام: {local.rejectedDeviceCauseOfUse}</Text>
                     
                     {/* PrevUser Info */}
                     <Text style={styles.headerText}>معلومات عن المستخدم السابق</Text>
-                    <Text style={styles.Text}>عمر المستخدم السابق: {local.prevUserAge}</Text>
-                    <Text style={styles.Text}>وزن المستخدم السابق: {local.prevUserWeight}</Text>
-                    <Text style={styles.Text}>مدة الاستخدام: {local.durationOfUse}</Text>
+                    <Text style={styles.Text}>عمر المستخدم السابق: {local.rejectedDevicePrevUserAge}</Text>
+                    <Text style={styles.Text}>وزن المستخدم السابق: {local.rejectedDevicePrevUserWeight}</Text>
+                    <Text style={styles.Text}>مدة الاستخدام: {local.rejectedDeviceDurationOfUse}</Text>
 
                     {/* Donner Info */}
                     <Text style={styles.headerText}>معلومات عن فاعل الخير</Text>
-                    <Text style={styles.Text}>الاسم: {local.donnerName}</Text>
-                    <Text style={styles.Text}>رقم الهاتف: {local.donnerPhone}</Text>
-                    <Text style={styles.Text}>مكان السكن: {local.donnerLocation}</Text>
+                    <Text style={styles.Text}>رقم الهاتف: {local.rejectedDeviceDonnerPhoneNumber}</Text>
+                    <Text style={styles.Text}>مكان السكن: {local.rejectedDeviceDonnerLocation}</Text>
                 </View>
 
             </ScrollView>
-        </SafeAreaProvider>
+        </SafeAreaView>
     )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFF',
-        alignItems: 'center',
-        justifyContent: 'center',
-        paddingBottom:24
+    container:{
+        paddingHorizontal:24,
+        display:"flex",
+        flexDirection:"column",
+        flex:1,
+        textAlign:"right",
+        backgroundColor:"#FFF",
     },
     imgContainer:{
         borderBottomWidth: 3,
@@ -72,7 +73,7 @@ const styles = StyleSheet.create({
     Text:{
         textAlign:"right",
         fontSize:16,
-        marginTop:8,
+        marginVertical:8,
     },
     btnView:{
         flexDirection:"row",

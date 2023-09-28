@@ -1,10 +1,10 @@
-import { View, Text, StyleSheet, SafeAreaView, TouchableOpacity, Image, FlatList } from 'react-native'
+import { View, Image,Text, StyleSheet, TouchableOpacity, TextInput, Alert, FlatList} from 'react-native'
 import {Link} from 'expo-router'
-import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { ScrollView } from 'react-native-gesture-handler'
+import React from 'react'
+import { SafeAreaView } from 'react-native-safe-area-context'
+import { useState } from 'react'
+import { ScrollView } from 'react-native'
 
-//Assets
-import LogoSm from '../../assets/imgs/Logo-sm.png'
 
 //Components
 import CategoryCard from '../../Componentes/Home/CategoryCard';
@@ -52,68 +52,67 @@ const Dashboard = () => {
 
     const renderCategoryCard = ({item})=>{
         return(
-            <Link href={item.path} style={styles.Cards}>
-                <CategoryCard 
-                    seen={item.seen} 
-                    categoryImg={item.categoryImg} 
-                    categoryType={item.categoryName}
-                />            
-            </Link>
+            <View style={{flexDirection:"column", alignItems:"center", justifyContent:"center"}}>
+                <Link href={item.path}  style={{marginVertical:12, height:128}}>
+                    <CategoryCard 
+                        seen={item.seen} 
+                        categoryImg={item.categoryImg} 
+                        categoryType={item.categoryName}
+                    />            
+                </Link>
+            </View>
         )
     }
 
 return (
-    <SafeAreaProvider  style={styles.container}>
+    <SafeAreaView  style={styles.container}>
     {/* Top Nav */}
-    <ScrollView>
     <View style={styles.tobNav}>
-        <Image source={LogoSm}/>
+        <View>
+            <Image source={require('../../assets/imgs/Logo-sm.png')}/>
+        </View>
+        <Text style={styles.headerText}>
+            معنا، كل تبرع يحمل قصة عن الرعاية والعطاء   
+        </Text>
     </View>
-    <Text style={styles.headerText}>
-        معنا، كل تبرع يحمل قصة عن الرعاية والعطاء   
-    </Text>
     {/* CategoryCards */}
-    <View style={styles.Cards}>
+    <View style={{flex:1}}>
         <FlatList
             data={categories}
             renderItem={renderCategoryCard}
             keyExtractor={(item) => (item && item.id ? item.id.toString() : 'defaultKey')}
+            showsVerticalScrollIndicator={false}
         />
     </View>
-    </ScrollView>
-    </SafeAreaProvider>
+    </SafeAreaView>
 )
 }
 
 const styles = StyleSheet.create({
-    container: {
-        flex: 1,
-        backgroundColor: '#FFF',
+    container:{
+        paddingHorizontal:24,
+        display:"flex",
+        flexDirection:"column",
+        flex:1,
+        textAlign:"right",
+        backgroundColor:"#FFF",
     },
     tobNav:{
-        flexDirection:"row",
-        justifyContent:"flex-end",
-        alignItems:"center",
-        marginHorizontal:24,
-        marginTop:36,
-        marginBottom:24
+        flexDirection:"column",
+        justifyContent:"space-evenly",
+        alignItems:"flex-end",
+        marginVertical:12,
     },
     headerText:{
         textAlign:"right",
         fontSize:26,
         fontWeight:'bold',
-        marginHorizontal:24,
-        marginBottom:24
     },
     Text:{
         textAlign:"right",
         fontSize:16,
         width:150
     },
-    Cards:{
-        marginVertical:12,
-        alignItems:'center'
-    }
 })
 
 export default Dashboard
