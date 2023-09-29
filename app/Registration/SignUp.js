@@ -196,7 +196,7 @@ const SignUp = () => {
                     />
                 </View>
                 {showLink ? (
-                    <Redirect href="/Registration/ConfirmAcc" />
+                    <Redirect href="/home/Dashboard" />
                 ) : (
                     <>
                         <TouchableOpacity
