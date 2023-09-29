@@ -14,33 +14,44 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
+import { Redirect } from "expo-router";
 
 const RejectDevice = () => {
     const local = useLocalSearchParams();
-    const [causeOfRejcet, setCauseOfReject] = useState('ادخل السبب هنا')
-    const [rejectedDeviceData, setRejectedDeviceDate] = useState({})
-    const [viewLink, setViewLink] = useState(false)
+    const [causeOfRejcet, setCauseOfReject] = useState("ادخل السبب هنا");
+    const [rejectedDeviceData, setRejectedDeviceDate] = useState({});
+    const [showLink, setShowLink] = useState(false);
+    const [isFocused, setIsFocused] = useState(false);
 
-    const handelReject = ()=>{
-        if(causeOfRejcet != 'ادخل السبب هنا'){
+    const handelReject = () => {
+        if (causeOfRejcet != "ادخل السبب هنا") {
             setRejectedDeviceDate({
-                rejectedDeviceImg:local.rejectDeviceImg,
-                rejectedDeviceType:local.rejectDeviceType,
-                rejectedDeviceSize:local.rejectDeviceSize,
-                rejectedDeviceModel:local.rejectDeviceModel,
-                rejectedDeviceDurationOfUse:local.rejectDeviceDurationOfUse,
-                rejectedDevicePrevUserAge:local.rejectDevicePrevUserAge,
-                rejectedDevicePrevUserWeight:local.rejectDevicePrevUserWeight,
-                rejectedDeviceCauseOfUse:local.rejectDeviceCauseOfUse,
-                rejectedDeviceDonnerPhoneNumber:local.rejectDeviceDonnerPhoneNumber,
-                rejectedDeviceDonnerLocatio:local.rejectDeviceDonnerLocation,
-                rejectedDeviceCauseOfUse: causeOfRejcet
-            })
-            setViewLink(true)
-        }else {
-            Alert.alert("سبب الرفض", "يرجى ادخال سبب لرفض الجهاز")
+                rejectedDeviceImg: local.rejectDeviceImg,
+                rejectedDeviceType: local.rejectDeviceType,
+                rejectedDeviceSize: local.rejectDeviceSize,
+                rejectedDeviceModel: local.rejectDeviceModel,
+                rejectedDeviceDurationOfUse: local.rejectDeviceDurationOfUse,
+                rejectedDevicePrevUserAge: local.rejectDevicePrevUserAge,
+                rejectedDevicePrevUserWeight: local.rejectDevicePrevUserWeight,
+                rejectedDeviceCauseOfUse: local.rejectDeviceCauseOfUse,
+                rejectedDeviceDonnerPhoneNumber:
+                    local.rejectDeviceDonnerPhoneNumber,
+                rejectedDeviceDonnerLocatio: local.rejectDeviceDonnerLocation,
+                rejectedDeviceCauseOfUse: causeOfRejcet,
+            });
+            setShowLink(true);
+        } else {
+            Alert.alert("سبب الرفض", "يرجى ادخال سبب لرفض الجهاز");
         }
-    }
+    };
+
+    const inputFoucus = () => {
+        setIsFocused(true);
+    };
+
+    const inputBlur = () => {
+        setIsFocused(false);
+    };
 
     return (
         <SafeAreaView style={styles.container}>
@@ -54,22 +65,30 @@ const RejectDevice = () => {
                         {" "}
                         هل يمكنك إخبار المتبرع بسبب رفض الجهاز؟
                     </Text>
-                    <TextInput 
-                        style={styles.textInput} 
-                        multiline={true} 
+                    <TextInput
+                        onFocus={inputFoucus}
+                        onBlur={inputBlur}
+                        style={
+                            isFocused
+                                ? styles.inputFieldFocus
+                                : styles.textInput
+                        }
+                        multiline={true}
                         value={causeOfRejcet}
-                        onChangeText={(text)=>setCauseOfReject(text)}
+                        onChangeText={(text) => setCauseOfReject(text)}
                     />
                 </View>
-                <TouchableOpacity style={styles.btn1} onPress={handelReject}>
-                    {viewLink ?
-                    <Link href={'/home/Dashboard'}>
-                        <Text style={{ fontSize: 17 }}>رفض الجهاز</Text>
-                    </Link>: 
+                {showLink ? (
+                    <Redirect href="/home/Dashboard" />
+                ) : (
                     <>
-                        <Text style={{ fontSize: 17 }}>رفض الجهاز</Text>
-                    </>}
-                </TouchableOpacity>
+                        <TouchableOpacity
+                            style={styles.btn1}
+                            onPress={handelReject}>
+                            <Text style={{ fontSize: 17 }}>رفض الجهاز</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
             </ScrollView>
         </SafeAreaView>
     );
@@ -121,11 +140,22 @@ const styles = StyleSheet.create({
         borderRadius: 8,
         borderColor: "#005F86",
         paddingHorizontal: 16,
-        paddingVertical: 10,
+        paddingVertical: 20,
+        fontSize: 18,
         display: "flex",
         flexDirection: "column",
         justifyContent: "center",
         alignItems: "center",
+    },
+    inputFieldFocus: {
+        paddingHorizontal: 16,
+        paddingVertical: 20,
+        fontSize: 18,
+        backgroundColor: "#899BAB",
+        borderRadius: 8,
+        textAlign: "right",
+        marginVertical: 8,
+        marginBottom: 256,
     },
 });
 

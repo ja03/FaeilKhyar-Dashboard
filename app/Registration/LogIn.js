@@ -11,12 +11,12 @@ import React from "react";
 import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { ScrollView } from "react-native";
-
+import { Redirect } from "expo-router";
 
 const LogIn = () => {
     const [email, setEmail] = useState("");
     const [password, setPassword] = useState("");
-    const [path, setPath] = useState("/Registration/LogIn");
+    const [showLink, setShowLink] = useState(false);
     const [logInData, setLogInData] = useState({
         hospitalEmail: " ",
         hospitalPassword: "",
@@ -28,7 +28,7 @@ const LogIn = () => {
         if (emailRegex.test(email)) {
             return true; // Valid email
         } else {
-            Alert.alert("Invalid email address"); // Alert if the email is invalid
+            Alert.alert("عنوان البريد الإلكتروني غير صالح"); // Alert if the email is invalid
         }
     };
 
@@ -43,8 +43,8 @@ const LogIn = () => {
             return true;
         } else {
             Alert.alert(
-                "Invalid Password",
-                "Password must be at least 8 characters long, contain at least one uppercase letter, and can only contain letters and underscores."
+                "كلمة مرور غير صالحة",
+                "يجب أن تكون كلمة المرور على الأقل 8 أحرف، تحتوي على حرف كبير واحد على الأقل، ويمكن أن تحتوي فقط على الأحرف والشرطات السفلية."
             );
         }
     };
@@ -62,7 +62,7 @@ const LogIn = () => {
             });
 
             // Update the path and navigate to the home page
-            setPath("/home/Dashboard");
+            setShowLink(true);
             console.log("Path changed");
         }
     };
@@ -112,11 +112,17 @@ const LogIn = () => {
                         نسيت كلمة المرور؟
                     </Link>
                 </View>
-                <TouchableOpacity style={styles.btn} onPress={handleLogin}>
-                    <Link href={path} style={styles.btnText}>
-                        تسجيل دخول
-                    </Link>
-                </TouchableOpacity>
+                {showLink ? (
+                    <Redirect href="/home/Dashboard" />
+                ) : (
+                    <>
+                        <TouchableOpacity
+                            style={styles.btn}
+                            onPress={handleLogin}>
+                            <Text style={styles.btnText}>تسجيل دخول</Text>
+                        </TouchableOpacity>
+                    </>
+                )}
             </ScrollView>
         </SafeAreaView>
     );
@@ -166,7 +172,7 @@ const styles = StyleSheet.create({
     subLinkText: {
         fontSize: 14,
         color: "#005F86",
-        textAlign:"right"
+        textAlign: "right",
     },
     inputField: {
         paddingHorizontal: 16,

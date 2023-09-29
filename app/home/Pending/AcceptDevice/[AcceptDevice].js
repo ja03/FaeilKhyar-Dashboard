@@ -14,7 +14,7 @@ import { SafeAreaView } from "react-native-safe-area-context";
 import { useState } from "react";
 import { ScrollView } from "react-native";
 import { useLocalSearchParams } from "expo-router";
-
+import { Redirect } from "expo-router";
 
 const AcceeptDevice = () => {
     // The QR URI form the backend
@@ -37,6 +37,7 @@ const AcceeptDevice = () => {
 
     const [viewQR, setViewQR] = useState(false);
     const [QRcode, setQRcode] = useState();
+    const [showLink, setShowLink] = useState(false);
 
     const handelAccept = () => {
         // here we send the data
@@ -46,9 +47,10 @@ const AcceeptDevice = () => {
         setViewQR(true);
     };
 
-    const handelSendToDonner=()=>{
-        //function that will sent the QRcodeUri to the donner
-    }
+    const handelSendToDonner = () => {
+        //send the code to donner
+        setShowLink(true);
+    };
     return (
         <SafeAreaView style={styles.container}>
             <ScrollView>
@@ -59,22 +61,31 @@ const AcceeptDevice = () => {
                     <Text style={styles.btnText}>انشئ الرمز</Text>
                 </TouchableOpacity>
                 {viewQR ? (
-                    <View style={{alignItems:"center", justifyContent:"center", gap:24}}>
+                    <View
+                        style={{
+                            alignItems: "center",
+                            justifyContent: "center",
+                            gap: 24,
+                        }}>
                         <View style={styles.imgContainer}>
-                                <Image source={QRcodeUri.QRcodeUri}/>
+                            <Image source={QRcodeUri.QRcodeUri} />
                         </View>
-                        <TouchableOpacity style={styles.btn} onPress={handelSendToDonner}>
-                            <Link href={'home/Dashboard'}>
-                                <Text style={styles.btnText}>ارسله الى المتبرع</Text>
-                            </Link>
+                        <TouchableOpacity
+                            style={styles.btn}
+                            onPress={handelSendToDonner}>
+                            <Text>
+                                <Text style={styles.btnText}>
+                                    ارسله الى المتبرع
+                                </Text>
+                            </Text>
                         </TouchableOpacity>
                     </View>
                 ) : (
                     <>
-                        <View style={styles.imgContainer}>
-                        </View>
+                        <View style={styles.imgContainer}></View>
                     </>
                 )}
+                {showLink && <Redirect href={"home/Dashboard"} />}
             </ScrollView>
         </SafeAreaView>
     );
