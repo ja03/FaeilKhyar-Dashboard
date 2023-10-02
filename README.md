@@ -36,6 +36,6 @@ npm install
 ### Start the app
 
 ```bash
-expo start
+npx expo start
 ```
 
