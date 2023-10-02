@@ -3,7 +3,13 @@
 
 # Description
 
-Hello and welcome to Faeil Khayr Repo, where you will be introduced to the hospital donation and inventory management application that modernizes the approach to medical device management in health institutions. This software provides hospital staff with the ability to create hospital accounts, monitor and manage donations, make informed decisions to accept or reject donations, and generate QR codes to verify accepted donations. This application is part of the Philanthropist project
+Hello and welcome to Faeil Khayr Repo, where you will be introduced to the hospital donation and inventory management application that modernizes the approach to medical device management in health institutions. This software provides hospital staff with the ability to create hospital accounts, monitor and manage donations, make informed decisions to accept or reject donations, and generate QR codes to verify accepted donations. This application is part of the Faeil Khayr project
+
+## Tools Used
+
+ **React Native:** The mobile app is built using React Native.
+
+ **Expo Router:** For navigation within the app, we've utilized Expo's built-in navigation components, making it easy to create a smooth and intuitive user experience.
 
 ## 🚀 Check out the app!
 
